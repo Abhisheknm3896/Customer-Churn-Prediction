@@ -1,0 +1,31 @@
+CustomerID,Gender,Age,Tenure,MonthlyCharges,TotalCharges,ContractType,InternetService,PaymentMethod,Churn
+1001,Male,25,2,45.50,91.00,Month-to-month,Fiber optic,Credit Card,1
+1002,Female,32,24,70.20,1684.80,One year,DSL,Bank Transfer,0
+1003,Male,45,36,85.60,3081.60,Two year,Fiber optic,Credit Card,0
+1004,Female,29,5,55.40,277.00,Month-to-month,DSL,Electronic Check,1
+1005,Male,38,18,65.80,1184.40,One year,Fiber optic,Credit Card,0
+1006,Female,41,48,90.10,4324.80,Two year,Fiber optic,Bank Transfer,0
+1007,Male,22,1,40.00,40.00,Month-to-month,DSL,Electronic Check,1
+1008,Female,35,12,60.30,723.60,One year,DSL,Credit Card,0
+1009,Male,50,60,95.40,5724.00,Two year,Fiber optic,Bank Transfer,0
+1010,Female,27,3,49.90,149.70,Month-to-month,Fiber optic,Electronic Check,1
+1011,Male,31,15,62.50,937.50,One year,DSL,Credit Card,0
+1012,Female,40,30,78.20,2346.00,Two year,Fiber optic,Bank Transfer,0
+1013,Male,24,4,46.30,185.20,Month-to-month,DSL,Electronic Check,1
+1014,Female,37,20,68.10,1362.00,One year,Fiber optic,Credit Card,0
+1015,Male,48,55,92.30,5076.50,Two year,Fiber optic,Bank Transfer,0
+1016,Female,26,6,51.70,310.20,Month-to-month,DSL,Electronic Check,1
+1017,Male,33,28,74.80,2094.40,One year,Fiber optic,Credit Card,0
+1018,Female,44,40,87.90,3516.00,Two year,Fiber optic,Bank Transfer,0
+1019,Male,23,2,43.20,86.40,Month-to-month,DSL,Electronic Check,1
+1020,Female,36,16,66.90,1070.40,One year,Fiber optic,Credit Card,0
+1021,Male,52,60,98.40,5904.00,Two year,Fiber optic,Bank Transfer,0
+1022,Female,28,7,53.60,375.20,Month-to-month,DSL,Electronic Check,1
+1023,Male,39,22,71.40,1570.80,One year,Fiber optic,Credit Card,0
+1024,Female,46,42,88.80,3729.60,Two year,Fiber optic,Bank Transfer,0
+1025,Male,30,10,58.50,585.00,Month-to-month,DSL,Credit Card,1
+1026,Female,34,26,72.30,1879.80,One year,Fiber optic,Bank Transfer,0
+1027,Male,43,38,84.50,3211.00,Two year,Fiber optic,Credit Card,0
+1028,Female,21,1,39.90,39.90,Month-to-month,DSL,Electronic Check,1
+1029,Male,47,50,91.20,4560.00,Two year,Fiber optic,Bank Transfer,0
+1030,Female,29,8,54.80,438.40,Month-to-month,DSL,Electronic Check,1
