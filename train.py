@@ -52,26 +52,26 @@ def main():
     # Start an MLflow experiment to track the run
     mlflow.set_experiment("Customer Churn Prediction")
 
+    # Configure MLflow
+    mlflow.set_tracking_uri("http://127.0.0.1:5000")
+    mlflow.set_experiment("Customer Churn Prediction")
+
     with mlflow.start_run():
-        # Create and train the Random Forest model
-        model = RandomForestClassifier(n_estimators=100, random_state=42)
+
+        model = RandomForestClassifier(
+            n_estimators=100,
+            random_state=42
+        )
+
         model.fit(X_train, y_train)
 
-        # Predict on test data
         y_pred = model.predict(X_test)
 
-        # Calculate model performance metrics
         accuracy = accuracy_score(y_test, y_pred)
         precision = precision_score(y_test, y_pred)
         recall = recall_score(y_test, y_pred)
         f1 = f1_score(y_test, y_pred)
 
-        print("\nAccuracy :", accuracy)
-        print("Precision:", precision)
-        print("Recall   :", recall)
-        print("F1 Score :", f1)
-
-        # Log model details and metrics to MLflow
         mlflow.log_param("Model", "RandomForest")
         mlflow.log_param("n_estimators", 100)
 
@@ -80,11 +80,15 @@ def main():
         mlflow.log_metric("Recall", recall)
         mlflow.log_metric("F1 Score", f1)
 
-        #  Save the trained model and log it to MLflow
-        mlflow.sklearn.log_model(model, "Customer_Churn_Model")
+        mlflow.sklearn.log_model(
+            sk_model=model,
+            artifact_path="model",
+            registered_model_name="Customer_Churn_Model"
+        )
+
         joblib.dump(model, "models/churn_model.joblib")
 
-    print("\nModel Saved Successfully")
+        print("\nModel Saved Successfully")
 
 
 if __name__ == "__main__":

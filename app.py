@@ -1,50 +1,65 @@
-# This is a FastAPI web application that provides a prediction endpoint for customer churn.
-# It loads the trained model and uses it to predict whether a customer will churn.
+# Customer Churn Prediction API using FastAPI
+import os
+import joblib
+import numpy as np
 
-from fastapi import FastAPI, HTTPException  # FastAPI framework for building web APIs
-from pydantic import BaseModel, Field  # Used to define and validate input data structure
-import joblib  # Used to load the trained machine learning model
-import numpy as np  # Used for numeric operations and arrays
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
+# Create FastAPI App
 
-# Create a FastAPI instance with metadata
 app = FastAPI(
     title="Customer Churn Prediction API",
-    description="Predict whether a customer will churn",
+    description="Predict whether a customer will churn using a trained Random Forest model.",
     version="1.0"
 )
 
-# Load the trained model from the saved file
-model = joblib.load("models/churn_model.joblib")
+# Load Trained Model
+MODEL_PATH = "models/churn_model.joblib"
 
+if not os.path.exists(MODEL_PATH):
+    raise FileNotFoundError(
+        f"Model not found at '{MODEL_PATH}'. Please run train.py first."
+    )
 
-# Define the input data structure using Pydantic BaseModel
-# This ensures the API receives valid customer data
+model = joblib.load(MODEL_PATH)
+
+print("Model Loaded Successfully")
+
+# Input Schema
+
 class Customer(BaseModel):
     CustomerID: int
     Gender: int
-    Age: int = Field(..., ge=18, le=100)  # Age must be between 18 and 100
-    Tenure: int = Field(..., ge=0)  # Tenure must be 0 or greater
-    MonthlyCharges: float = Field(..., gt=0)  # Monthly charges must be greater than 0
-    TotalCharges: float = Field(..., gt=0)  # Total charges must be greater than 0
+    Age: int = Field(..., ge=18, le=100)
+    Tenure: int = Field(..., ge=0)
+    MonthlyCharges: float = Field(..., gt=0)
+    TotalCharges: float = Field(..., gt=0)
     ContractType: int
     InternetService: int
     PaymentMethod: int
 
+# Home Endpoint
 
-# Define a home endpoint that runs when the API starts
 @app.get("/")
 def home():
     return {
-        "message": "Customer Churn Prediction API is Running"
+        "message": "Customer Churn Prediction API is Running Successfully"
+    }
+
+# Health Check Endpoint
+
+@app.get("/health")
+def health():
+    return {
+        "status": "healthy"
     }
 
 
-# Define the prediction endpoint that accepts customer data
+# Prediction Endpoint
 @app.post("/predict")
 def predict(customer: Customer):
 
     try:
-        # Convert customer data into a numpy array for the model
         data = np.array([[
             customer.CustomerID,
             customer.Gender,
@@ -57,21 +72,19 @@ def predict(customer: Customer):
             customer.PaymentMethod
         ]])
 
-        #  Use the trained model to make a prediction
         prediction = model.predict(data)
 
-        # Convert the numeric prediction to a readable message
-        if prediction[0] == 1:
-            result = "Customer Will Churn"  # 1 means the customer will churn
-        else:
-            result = "Customer Will Stay"   # 0 means the customer will not churn
+        result = (
+            "Customer Will Churn"
+            if prediction[0] == 1
+            else "Customer Will Stay"
+        )
 
-        # Return the prediction result to the client
         return {
-            "prediction": result
+            "prediction": int(prediction[0]),
+            "result": result
         }
 
-    # Handle any errors that occur during prediction
     except Exception as e:
         raise HTTPException(
             status_code=500,
