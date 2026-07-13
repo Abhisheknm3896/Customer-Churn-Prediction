@@ -1,32 +1,30 @@
-# Customer Churn Prediction API using FastAPI
 import os
-import joblib
 import numpy as np
+import mlflow.pyfunc
 
 from fastapi import FastAPI, HTTPException
+
 from pydantic import BaseModel, Field
-# Create FastAPI App
 
-app = FastAPI(
-    title="Customer Churn Prediction API",
-    description="Predict whether a customer will churn using a trained Random Forest model.",
-    version="1.0"
-)
+from download_from_s3 import download_registered_model
 
-# Load Trained Model
-MODEL_PATH = "models/churn_model.joblib"
+# Download model from S3 if not available locally
+download_registered_model()
 
-if not os.path.exists(MODEL_PATH):
-    raise FileNotFoundError(
-        f"Model not found at '{MODEL_PATH}'. Please run train.py first."
-    )
-
-model = joblib.load(MODEL_PATH)
+# Load MLflow model
+model = mlflow.pyfunc.load_model("registered_model/models/artifacts")
 
 print("Model Loaded Successfully")
 
-# Input Schema
+# Create FastAPI App
+app = FastAPI(
+    title="Customer Churn Prediction API",
+    description="Predict whether a customer will churn using a trained MLflow model.",
+    version="1.0"
+)
 
+
+# Input Schema
 class Customer(BaseModel):
     CustomerID: int
     Gender: int
@@ -38,16 +36,16 @@ class Customer(BaseModel):
     InternetService: int
     PaymentMethod: int
 
-# Home Endpoint
 
+# Home Endpoint
 @app.get("/")
 def home():
     return {
         "message": "Customer Churn Prediction API is Running Successfully"
     }
 
-# Health Check Endpoint
 
+# Health Endpoint
 @app.get("/health")
 def health():
     return {
@@ -60,7 +58,8 @@ def health():
 def predict(customer: Customer):
 
     try:
-        data = np.array([[
+
+        data = [[
             customer.CustomerID,
             customer.Gender,
             customer.Age,
@@ -70,7 +69,7 @@ def predict(customer: Customer):
             customer.ContractType,
             customer.InternetService,
             customer.PaymentMethod
-        ]])
+        ]]
 
         prediction = model.predict(data)
 
