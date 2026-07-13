@@ -13,6 +13,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Create ZIP package
+        run: |
+          zip -r deploy.zip . \
+            -x "*.git*" \
+            -x "venv/*" \
+            -x "__pycache__/*" \
+            -x "*.pyc"
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
@@ -22,4 +30,4 @@ jobs:
           environment_name: Customer-churn-api-env
           region: us-east-1
           version_label: ${{ github.sha }}
-          deployment_package: .
+          deployment_package: deploy.zip
